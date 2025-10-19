@@ -13,11 +13,11 @@ lb config noauto \
     --initramfs live-boot \
     --system normal \
     --binary-file ext4 \
-    --image-name unitec-pdv \
-    --iso-application Unitec \
+    --image-name aramo-pdv \
+    --iso-application aramo \
     --iso-preparer Anderson \
     --iso-publisher andersonlix@gmail.com \
-    --iso-volume unitec \
+    --iso-volume aramo \
     --archive-areas "main contrib non-free non-free-firmware" \
     --debootstrap-options "--include=apt-transport-https,ca-certificates,openssl,e2fsprogs" \
     --bootappend-live "" \

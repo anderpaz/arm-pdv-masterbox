@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="/storage/sources/linux/pdv-unity/base/commands/scripts"
+BIN_DIR="/storage/sources/linux/pdv-unity/base/config/includes.chroot_after_packages/usr/local/bin"
+
+for script in "$SCRIPT_DIR"/*.sh; do
+  filename=$(basename "$script" .sh)
+  echo "Criptografando $script"
+  shc -r -U -m "Att. andersonlix@gmail.com.br" -f "$script" -o "${SCRIPT_DIR}/${filename}"
+  rm -f "${script}.x.c"
+  mv "${SCRIPT_DIR}/${filename}" "${BIN_DIR}/${filename}" -f
+done
+
+echo "Processo concluído."

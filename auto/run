@@ -32,8 +32,8 @@ read -p "Copiar a iso? (S/n) " copy_answer
 copy_answer=${copy_answer:-s}
 if [[ "$copy_answer" =~ ^[Ss] ]]; then
     clear
-    DEST="/home/ander/Documentos/unitec-pdv-$(date +%y-%m-%d).iso"
-    rsync --progress /storage/sources/linux/pdv-unity/build/unitec-pdv-amd64.hybrid.iso "$DEST"
+    DEST="/home/ander/Documentos/aramo-pdv-$(date +%y-%m-%d).iso"
+    rsync --progress /storage/sources/linux/pdv-unity/build/aramo-pdv-amd64.hybrid.iso "$DEST"
     chown ander:ander "$DEST"
     echo "Arquivo copiado."
     echo
