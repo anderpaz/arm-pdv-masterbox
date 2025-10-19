@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sudo umount --lazy /storage/sources/linux/pdv-unity/chroot/proc
+sudo umount --lazy /storage/sources/linux/pdv-unity/chroot/sys

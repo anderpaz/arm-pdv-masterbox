@@ -1,0 +1,41 @@
+#!/bin/bash
+
+EXPIRATION_DATE=$(grep -E '^EXPIRATION_DATE=' /storage/sources/linux/pdv-unity/base/commands/scripts/grubiso.sh | cut -d'=' -f2 | tr -d "'\" ")
+CURRENT_DATE=$(date +%Y%m%d)
+
+if [ "$EXPIRATION_DATE" != "$CURRENT_DATE" ]; then
+    echo 
+    echo "Data de expiração ($EXPIRATION_DATE) não bate com hoje ($CURRENT_DATE). Abortando."
+    echo 
+    exit 1
+fi
+
+commands=("clean --purge" "config" "buildScript" "settings" "build")
+for cmd in "${commands[@]}"; do
+    read -p "Deseja executar '$cmd'? (S/n) " answer
+    answer=${answer:-s}
+    case "$answer" in
+        [Ss]* )
+            clear
+            echo "Executando $cmd..."
+            auto/${cmd// / } 
+            echo ""
+            ;;
+        * )
+            echo "Pulando $cmd"
+            ;;
+    esac
+done
+
+echo
+read -p "Copiar a iso? (S/n) " copy_answer
+copy_answer=${copy_answer:-s}
+if [[ "$copy_answer" =~ ^[Ss] ]]; then
+    clear
+    DEST="/home/ander/Documentos/unitec-pdv-$(date +%y-%m-%d).iso"
+    rsync --progress /storage/sources/linux/pdv-unity/build/unitec-pdv-amd64.hybrid.iso "$DEST"
+    chown ander:ander "$DEST"
+    echo "Arquivo copiado."
+    echo
+fi
+
