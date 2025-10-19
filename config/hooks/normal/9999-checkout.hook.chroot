@@ -1,0 +1,5 @@
+#!/bin/bash
+
+tar -xzvf /usr/share/iso/checkout.tar.gz -C /usr/unitec/
+
+chmod +x /usr/unitec/pdv/updv

@@ -1,0 +1,13 @@
+[Unit]
+Description=Init After
+After=multi-user.target mariadb.service
+Before=shutdown.target
+
+[Service]
+ExecStart=/usr/local/bin/initafter >/dev/null 2>&1
+Type=oneshot
+RemainAfterExit=yes
+#ExecStartPost=/bin/bash -c 'rm -f /etc/systemd/system/initafter.service && systemctl daemon-reload' > /dev/null 2>&1
+
+[Install]
+WantedBy=multi-user.target

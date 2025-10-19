@@ -1,0 +1,11 @@
+# If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR="Pdv Unitec"
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3"
+GRUB_CMDLINE_LINUX="initrd=/install/gtk/initrd.gz usbcore.autosuspend=-1 mem_sleep_default=deep noatime nodiratime net.ifnames=0 biosdevname=0"
+GRUB_GFXPAYLOAD_LINUX=keep

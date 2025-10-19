@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+# Vim
+echo "set mouse=v" >>/root/.vimrc
+echo "syntax enable" >>/root/.vimrc
+
+#
+#ls --color=auto
