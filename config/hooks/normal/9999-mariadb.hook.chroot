@@ -6,7 +6,7 @@ SERVICE_D_DIR="/etc/systemd/system/mariadb.service.d"
 CONF_SERVER_PATH="/etc/mysql/mariadb.conf.d/50-server.cnf"
 CONF_PATH="$SERVICE_D_DIR/override.conf"
 OLD_DIR="/var/lib/mysql"
-NEW_DIR="/usr/unitec/mysql"
+NEW_DIR="/usr/aramo/mysql"
 
 mkdir -p "$SERVICE_D_DIR"
 echo "[Service]" | sudo tee "$CONF_PATH" >/dev/null

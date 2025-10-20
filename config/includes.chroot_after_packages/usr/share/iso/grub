@@ -5,7 +5,7 @@
 
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=0
-GRUB_DISTRIBUTOR="Pdv Unitec"
+GRUB_DISTRIBUTOR="Pdv Aramo"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=3"
 GRUB_CMDLINE_LINUX="initrd=/install/gtk/initrd.gz usbcore.autosuspend=-1 mem_sleep_default=deep noatime nodiratime net.ifnames=0 biosdevname=0"
 GRUB_GFXPAYLOAD_LINUX=keep

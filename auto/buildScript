@@ -2,4 +2,4 @@
 
 set -e
 
-/storage/sources/linux/pdv-unity/base/commands/build
+/storage/sources/linux/pdv-aramo/base/commands/build

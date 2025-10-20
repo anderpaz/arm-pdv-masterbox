@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="3.0.8"
+VERSION="3.0.1"
 echo "${VERSION}" >/etc/.init_v
 
 # Definir data de expiração (10 dias a partir de hoje)
