@@ -1,5 +1,0 @@
-#!/bin/bash
-
-tar -xzvf /usr/share/iso/checkout.tar.gz -C /usr/aramo/
-
-chmod +x /usr/aramo/pdv/updv

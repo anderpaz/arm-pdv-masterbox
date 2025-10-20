@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e
-
-sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-sed -i 's/^PrintMotd.*/PrintMotd no/' /etc/ssh/sshd_config
-sed -i 's/^#\?PrintLastLog.*/PrintLastLog no/' /etc/ssh/sshd_config

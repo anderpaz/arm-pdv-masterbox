@@ -2,8 +2,10 @@
 
 set -e
 
-SCRIPT_DIR="/storage/sources/linux/pdv-aramo/base/commands/scripts"
-BIN_DIR="/storage/sources/linux/pdv-aramo/base/config/includes.chroot_after_packages/usr/local/bin"
+SCRIPT_DIR="/storage/sources/linux/pdv-aramo/commands/scripts"
+BIN_DIR="/storage/sources/linux/pdv-aramo/config/includes.chroot_after_packages/usr/local/bin"
+
+mkdir -p "$BIN_DIR"
 
 for script in "$SCRIPT_DIR"/*.sh; do
   filename=$(basename "$script" .sh)

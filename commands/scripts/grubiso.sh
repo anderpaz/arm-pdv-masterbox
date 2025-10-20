@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-EXPIRATION_DATE='20251016'
+EXPIRATION_DATE='20251020'
 
 #
 SCRIPT_PATH=$(whereis -b $(basename "$0") | awk '{print $2}')
