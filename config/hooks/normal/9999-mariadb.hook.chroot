@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+SERVICE_D_DIR="/etc/systemd/system/mariadb.service.d"
+CONF_SERVER_PATH="/etc/mysql/mariadb.conf.d/50-server.cnf"
+CONF_PATH="$SERVICE_D_DIR/override.conf"
+OLD_DIR="/var/lib/mysql"
+NEW_DIR="/usr/aramo/mysql"
+
+mkdir -p "$SERVICE_D_DIR"
+echo "[Service]" | sudo tee "$CONF_PATH" >/dev/null
+echo "ReadWritePaths=$NEW_DIR" | sudo tee -a "$CONF_PATH" >/dev/null
+
+mv "$OLD_DIR" "$NEW_DIR"
+sed -i "s|^\(#\)\?datadir.*|datadir                 = $NEW_DIR|" "$CONF_SERVER_PATH"
+sed -i 's/^\(#\)\?bind-address.*/bind-address            = 0.0.0.0/' "$CONF_SERVER_PATH"
+# sed -i 's\skip-external-locking.*\#skip-external-locking.*\' /etc/mysql/mariadb.conf.d/50-server.cnf

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+find /usr/share/plymouth/themes/ -mindepth 1 -maxdepth 1 ! -name "spinfinity" ! -name "details" ! -name "text" -exec rm -rf {} +
+plymouth-set-default-theme spinfinity --rebuild-initrd

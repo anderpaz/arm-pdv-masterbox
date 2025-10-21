@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+systemctl enable initafter.service
+systemctl enable vnc.service
+
+sed -i '/^\[Service\]/a TimeoutStartSec=10s' /lib/systemd/system/networking.service
+sed -i 's\^#DefaultTimeoutStartSec.*\DefaultTimeoutStartSec=10s\' /etc/systemd/system.conf
+sed -i 's\^#DefaultTimeoutStopSec.*\DefaultTimeoutStopSec=5s\' /etc/systemd/system.conf

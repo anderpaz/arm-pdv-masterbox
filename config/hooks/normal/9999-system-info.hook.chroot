@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+# Mensagens
+echo "Pdv Aramo GNU/Linux 12 \n \l" >/etc/issue
+echo "Pdv Aramo GNU/Linux 12" >/etc/issue.net
+echo "" >/etc/motd
+
+# Versão os-release
+sudo sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="Pdv Aramo GNU\/Linux"/' /etc/os-release
+sudo sed -i 's/^NAME=.*/NAME="Pdv Aramo"/' /etc/os-release
+sudo sed -i 's/^VERSION=.*/VERSION="12"/' /etc/os-release
+sudo sed -i 's/^HOME_URL=.*/HOME_URL=""/' /etc/os-release
+sudo sed -i 's/^SUPPORT_URL=.*/SUPPORT_URL=""/' /etc/os-release
+sudo sed -i 's/^BUG_REPORT_URL=.*/BUG_REPORT_URL=""/' /etc/os-release
+
+#
+cat >/etc/update-motd.d/10-uname <<'EOF'
+#!/bin/sh
+
+ARCHITECTURE=$(uname -m)
+NAME=$(uname -n)
+
+echo " $NAME Linux Pdv Aramo $ARCHITECTURE"
+EOF
