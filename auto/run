@@ -1,6 +1,13 @@
 #!/bin/bash
 
-EXPIRATION_DATE=$(grep -E '^EXPIRATION_DATE=' /storage/sources/linux/pdv-aramo/commands/scripts/grubiso.sh | cut -d'=' -f2 | tr -d "'\" ")
+for dir in auto build commands config; do
+  if [ ! -d "$dir" ]; then
+    echo "ERRO: diretório obrigatório não encontrado: $dir" >&2
+    exit 1
+  fi
+done
+
+EXPIRATION_DATE=$(grep -E '^EXPIRATION_DATE=' commands/grubiso.sh | cut -d'=' -f2 | tr -d "'\" ")
 CURRENT_DATE=$(date +%Y%m%d)
 
 if [ "$EXPIRATION_DATE" != "$CURRENT_DATE" ]; then
@@ -10,7 +17,7 @@ if [ "$EXPIRATION_DATE" != "$CURRENT_DATE" ]; then
     exit 1
 fi
 
-commands=("clean --purge" "config" "buildScript" "settings" "build")
+commands=("clean.sh --purge" "config.sh" "buildScript.sh" "settings.sh" "build.sh")
 for cmd in "${commands[@]}"; do
     read -p "Deseja executar '$cmd'? (S/n) " answer
     answer=${answer:-s}
@@ -18,7 +25,7 @@ for cmd in "${commands[@]}"; do
         [Ss]* )
             clear
             echo "Executando $cmd..."
-            auto/${cmd// / } 
+            auto/${cmd} 
             echo ""
             ;;
         * )
@@ -33,9 +40,8 @@ copy_answer=${copy_answer:-s}
 if [[ "$copy_answer" =~ ^[Ss] ]]; then
     clear
     DEST="/home/ander/Documentos/aramo-pdv-$(date +%y-%m-%d).iso"
-    rsync --progress /storage/sources/linux/pdv-aramo/build/aramo-pdv-amd64.hybrid.iso "$DEST"
+    rsync --progress build/aramo-pdv-amd64.hybrid.iso "$DEST"
     chown ander:ander "$DEST"
     echo "Arquivo copiado."
     echo
 fi
-

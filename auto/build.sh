@@ -2,7 +2,12 @@
 
 set -e
 
-pushd ../build >/dev/null
+if [ ! -d "build" ]; then
+    echo "ERRO: diretório obrigatório não encontrado: $dir" >&2
+    exit 1
+fi
+
+pushd build >/dev/null
 
 #sed -i '/^#/d' config/includes.installer/preseed.cfg
 #sed -i '/^$/d' config/includes.installer/preseed.cfg

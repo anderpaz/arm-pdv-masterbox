@@ -1,0 +1,3 @@
+*.deb
+build/*
+config/includes.chroot_after_packages/usr/local/bin/*

@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
+
+if [ ! -d "build" ]; then
+    echo "ERRO: diretório obrigatório não encontrado: $dir" >&2
+    exit 1
+fi
+
+pushd build >/dev/null
 
 lb config noauto \
     --binary-images iso-hybrid \
@@ -28,3 +35,5 @@ lb config noauto \
     --updates false \
     --apt-indices false \
     "${@}"
+
+popd >/dev/null
