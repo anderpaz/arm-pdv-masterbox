@@ -1,4 +1,0 @@
-#!/bin/bash
-
-tar -xzvf /usr/share/iso/checkout.tar.gz -C /usr/aramo/
-

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+# Links para os comandos wive e crossover
+ln -sf /opt/cxoffice/bin/wine /usr/bin/wine
+ln -sf /opt/cxoffice/bin/crossover /usr/bin/crossover
+chmod +x /usr/bin/wine
+chmod +x /usr/bin/crossover
+
+# mover a garrafa
+tar -xzvf /usr/share/iso/aramo.tar.gz -C /root/.cxoffice/
+
+# Link para o drive esta em mnt
+ln -sf /root/.cxoffice/Aramo/drive_c/ /mnt/Aramo
+
+# Link para a garrada Aramo ser default
+ln -sf /root/.cxoffice/Aramo /root/.cxoffice/default

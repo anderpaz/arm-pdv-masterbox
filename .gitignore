@@ -4,5 +4,4 @@ build/*
 #
 config/includes.chroot_after_packages/usr/local/bin/*
 #
-config/packages.chroot/crossover_outronome_24.0.2-1.deb
-config/packages.chroot/dbeaver-ce_24.3.4_amd64
+config/packages.chroot/*.deb

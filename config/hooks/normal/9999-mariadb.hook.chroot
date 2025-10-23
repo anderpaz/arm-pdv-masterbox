@@ -16,3 +16,5 @@ mv "$OLD_DIR" "$NEW_DIR"
 sed -i "s|^\(#\)\?datadir.*|datadir                 = $NEW_DIR|" "$CONF_SERVER_PATH"
 sed -i 's/^\(#\)\?bind-address.*/bind-address            = 0.0.0.0/' "$CONF_SERVER_PATH"
 # sed -i 's\skip-external-locking.*\#skip-external-locking.*\' /etc/mysql/mariadb.conf.d/50-server.cnf
+
+ln -sf /etc/init.d/mariadb /etc/init.d/mysql
