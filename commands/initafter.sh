@@ -1,7 +1,7 @@
 #!/bin/bash
 
-VERSION="3.0.1"
-echo "${VERSION}" >/etc/.init_v
+VERSION="3.0.2"
+echo "${VERSION}" >/etc/version
 
 # Definir data de expiração (10 dias a partir de hoje)
 EXPIRATION_DATE=$(date -d "+10 days" +%Y%m%d)

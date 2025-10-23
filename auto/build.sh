@@ -12,6 +12,6 @@ pushd build >/dev/null
 #sed -i '/^#/d' config/includes.installer/preseed.cfg
 #sed -i '/^$/d' config/includes.installer/preseed.cfg
 
-lb build noauto "${@}" 2>&1 | tee build.log
+lb build noauto "${@}" 2>&1 | tee ../build.log
 
 popd >/dev/null

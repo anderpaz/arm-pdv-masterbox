@@ -3,7 +3,7 @@
 set -e
 
 SCRIPT_DIR="commands"
-BIN_DIR="../../config/includes.chroot_after_packages/usr/local/bin"
+BIN_DIR="../config/includes.chroot_after_packages/usr/local/bin"
 
 if [ ! -d "$SCRIPT_DIR" ]; then
     echo "ERRO: diretório obrigatório não encontrado: $dir" >&2

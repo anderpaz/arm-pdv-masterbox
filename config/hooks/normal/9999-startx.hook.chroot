@@ -3,8 +3,25 @@
 set -e
 
 if ! grep -q 'startx' /etc/profile; then
-  echo '# Startx tty1' >>/etc/profile
-  echo 'if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then' >>/etc/profile
-  echo '  startx' >>/etc/profile
-  echo 'fi' >>/etc/profile
+  cat >> /etc/profile <<'EOF'
+
+# Startx tty1
+if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
+  startx
+fi
+EOF
+fi
+
+if ! grep -q 'export DISPLAY' /root/.profile; then
+  cat >> /root/.profile <<'EOF'
+
+# X11 config to allow GUI apps as root
+if [ -z "$DISPLAY" ]; then
+  export DISPLAY=:0
+fi
+
+if [ -f /root/.Xauthority ]; then
+  export XAUTHORITY=/root/.Xauthority
+fi
+EOF
 fi

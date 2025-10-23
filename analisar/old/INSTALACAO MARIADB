@@ -1,0 +1,27 @@
+# INSTALACAO MARIADB
+sed -i 's\bind-address.*\#bind-address.*\' $mdbcnf
+sed -i 's\skip-external-locking.*\#skip-external-locking.*\' $mdbcnf
+echo "lower_case_table_names = 1" >> $mdbcnf
+echo "skip-grant-tables" >> $mdbcnf
+mysql -u$user -p$pass -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '152100';"
+mysql -u$user -p$pass -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
+mysql -u$user -p$pass -e "CREATE USER 'root'@'%' IDENTIFIED BY '152100';"
+mysql -u$user -p$pass -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+mysql -u$user -p$pass -e "FLUSH PRIVILEGES;"
+cat > /etc/rc.local << "EOF"
+#!/bin/bash
+while :; do
+	if [[ -e /run/mysqld/mysqld.pid ]]; then
+	break
+	fi
+done
+/usr/bin/mysqladmin -u root password '152100'
+mysql -uroot -p152100 -e"GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '152100' WITH GRANT OPTION;" -f
+mysql -uroot -p123456 -e"FLUSH PRIVILEGES;" -f
+sleep 1
+service mysql restart
+#rm -rf /etc/rc.local
+confser setser
+EOF
+chmod +x /etc/rc.local
+backuppdv criamdb
