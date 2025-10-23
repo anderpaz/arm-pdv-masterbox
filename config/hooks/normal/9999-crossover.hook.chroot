@@ -8,6 +8,11 @@ ln -sf /opt/cxoffice/bin/crossover /usr/bin/crossover
 chmod +x /usr/bin/wine
 chmod +x /usr/bin/crossover
 
+# Se a pasta default não existir, criar
+if [ ! -d /root/.cxoffice ]; then
+    mkdir -p /root/.cxoffice/default
+fi
+
 # mover a garrafa
 tar -xzvf /usr/share/iso/aramo.tar.gz -C /root/.cxoffice/
 
