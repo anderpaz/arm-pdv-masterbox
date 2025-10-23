@@ -6,7 +6,7 @@ cat > /etc/version <<EOF
 Version: ${VERSION}
 Debian: 12
 Architecture: amd64
-Develop: Anderson
+Develop: Anderson Paz
 Email: anderluizpaz@gmail.com
 EOF
 
