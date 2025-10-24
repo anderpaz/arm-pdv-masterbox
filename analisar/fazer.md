@@ -1,9 +1,14 @@
+#006064
+
 # Checar as COM
 # Configurar o menu, autostart e rc.xml "/usr/share/libalpdev/menu.xml"
 # Configurar a fonte "/usr/share/libalpdev/arial.ttf"
 # Fazer a rede não demorar mais e 10 segundos para se conectar ao iniciar
 # Ver se tem algo em /usr/share/iso/ depois de instalado
 # Ver se tem o link /etc/init.d/mysql
+
+# Instalar o firebird
+# Rever o comando defaults
 
 # Mudar o "/etc/default/grub", ver se precisa
   GRUB_CMDLINE_LINUX_DEFAULT usbcore.autosuspend=-1 acpi=force

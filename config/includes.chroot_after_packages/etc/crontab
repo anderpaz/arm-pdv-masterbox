@@ -6,6 +6,3 @@
 
 SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-
-55 23 * * * root /usr/local/bin/backuppdv cmanualbkpdia
-*/5 * * * * root /usr/sbin/ntpdate a.ntp.br
