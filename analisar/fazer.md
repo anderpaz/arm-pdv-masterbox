@@ -1,4 +1,4 @@
-#006064
+# #006064
 
 # Checar as COM
 # Configurar o menu, autostart e rc.xml "/usr/share/libalpdev/menu.xml"
@@ -6,6 +6,9 @@
 # Fazer a rede não demorar mais e 10 segundos para se conectar ao iniciar
 # Ver se tem algo em /usr/share/iso/ depois de instalado
 # Ver se tem o link /etc/init.d/mysql
+# Testar o vnc
+# Nâo precisa mais de firebird?
+# O Sistema usa m3 ou m5?
 
 # Instalar o firebird
 # Rever o comando defaults
@@ -33,6 +36,10 @@
   "ln -sf /opt/cxoffice/bin/wine /usr/bin/wine" "chmod +x /usr/bin/wine"
 # Criar link parao wine
   "ln -sf /opt/cxoffice/bin/crossover /usr/bin/crossover" "chmod +x /usr/bin/crossover"
+
+# Ver se precisa 
+echo aramoPdv > /etc/hostname
+echo aramoPdv > /proc/sys/kernel/hostname 
 
 # Configurações de garrafa 
     ln -sf /root/.cxoffice/Aramo /root/.cxoffice/default
@@ -85,3 +92,5 @@ echo "exit 0" >> $rclocal
 chmod +x $rclocal
 
 # Ver o crontab
+
+# Ver se initafter não da interação quando entra primeira vez

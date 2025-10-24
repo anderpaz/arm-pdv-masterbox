@@ -56,6 +56,28 @@ echo "# Default repositories for Debian Bookworm\n" >"$SOURCES_FILE"
 echo "deb http://deb.debian.org/debian bookworm main contrib" >>"$SOURCES_FILE"
 echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware" >>"$SOURCES_FILE"
 
+# Configurar a garrafa do Crossover
+ln -sf /root/.cxoffice/Aramo/drive_c/ /mnt/Aramo
+ln -sf /root/.cxoffice/Aramo /root/.cxoffice/default
+ln -sf /dev/ttyS0 /root/.cxoffice/Aramo/dosdevices/com1
+ln -sf /dev/ttyS1 /root/.cxoffice/Aramo/dosdevices/com2
+ln -sf /dev/ttyS2 /root/.cxoffice/Aramo/dosdevices/com3
+ln -sf /dev/ttyS3 /root/.cxoffice/Aramo/dosdevices/com4
+ln -sf /dev/ttyS4 /root/.cxoffice/Aramo/dosdevices/com5
+ln -sf /dev/ttyS5 /root/.cxoffice/Aramo/dosdevices/com6
+ln -sf /dev/ttyS6 /root/.cxoffice/Aramo/dosdevices/com7
+ln -sf /dev/usbPinPad /root/.cxoffice/Aramo/dosdevices/com8
+ln -sf /dev/usbBal /root/.cxoffice/Aramo/dosdevices/com9
+ln -sf /dev/usbEcf /root/.cxoffice/Aramo/dosdevices/com10/
+ln -sf /dev/sr0 /root/.cxoffice/Aramo/dosdevices/d::
+ln -sf ../drive_c/ /root/.cxoffice/Aramo/dosdevices/c:
+ln -sf /root/ /root/.cxoffice/Aramo/dosdevices/y:
+ln -sf / /root/.cxoffice/Aramo/dosdevices/z:
+
+# Configurar o Masterbox
+usbedit padrao
+backuppdv criamdb
+
 # Remover
 rm -f /etc/systemd/system/init.service /usr/local/bin/init >/dev/null 2>&1
 systemctl daemon-reload >/dev/null 2>&1

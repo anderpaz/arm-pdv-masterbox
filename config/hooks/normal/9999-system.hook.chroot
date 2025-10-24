@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+# Teclado br
+sed -i 's/XKBLAYOUT="us"/XKBLAYOUT="br"/g' /etc/default/keyboard
+
+

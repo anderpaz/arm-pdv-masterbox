@@ -1,0 +1,214 @@
+#!/bin/bash
+
+pass="152100"
+user="root"
+mdbcnf="/etc/mysql/mariadb.conf.d/50-server.cnf"
+
+#####
+
+run() {
+#
+export DEBIAN_FRONTEND=noninteractive
+##
+sed -i 's/XKBLAYOUT="us"/XKBLAYOUT="br"/g' /etc/default/keyboard
+
+rclocal="/etc/rc.local" echo "persona wall" >> $rclocal
+
+
+echo "#!/bin/bash -e" > $rclocal
+echo "########################" >> $rclocal
+
+echo "exit 0" >> $rclocal
+chmod +x $rclocal
+##
+echo -e '#!/bin/bash' > /usr/bin/ps
+echo -e '/bin/ps $* | /bin/grep -v "yad" | /bin/grep -v "/usr/bin/ps" | /bin/grep -v "wine"' >> /usr/bin/ps
+chmod +x /usr/bin/ps
+#
+echo -e 'keycode 77 = NoSymbol Num_Lock' > /root/.Xmodmap
+echo -e 'clear Lock' >> /root/.Xmodmap
+##
+mv /usr/share/libalpdev/smb.conf /etc/samba/smb.conf
+mkdir /mnt/temp
+chmod 777 /mnt/temp -Rf
+##
+comando="backuppdv infoser mnpdv redeedit resetmaster usbedit mastercp mnreset persona m5 resetmasterm5 confser"
+comando=$(echo $comando |sed 's/ /\n/g')
+for arq in $comando; do
+	mv /usr/share/libalpdev/$arq /usr/bin/$arq && chmod +x /usr/bin/$arq
+done
+##
+##
+echo '#!/bin/sh' > /etc/update-motd.d/10-uname
+echo ' ' >> /etc/update-motd.d/10-uname
+echo '' > /etc/motd
+echo '       PDV - MASTERBOX' >> /etc/motd
+echo '' >> /etc/motd
+echo ' Aramo Desenvolvimento de Sistemas.' >> /etc/motd
+echo '' >> /etc/motd
+
+mv /usr/share/libalpdev/menu.xml /etc/xdg/openbox/menu.xml
+mv /usr/share/libalpdev/autostart /etc/xdg/openbox/autostart
+mv /usr/share/libalpdev/rc.xml /etc/xdg/openbox/rc.xml
+#
+mkdir -p /root/.cxoffice/Aramo
+mv /usr/share/libalpdev/Aramo /root/.cxoffice/ -f
+chmod 755 /root/.cxoffice/Aramo -Rf
+##
+#cho -e '[CrossOver]' > /root/.cxoffice/cxoffice.conf
+#cho -e '"ReportWineUsage" = "0"' >> /root/.cxoffice/cxoffice.conf
+#cho -e "" >> /root/.cxoffice/cxoffice.conf
+#cho -e '[OfficeSetup]' >> /root/.cxoffice/cxoffice.conf
+#cho -e '"AutoUpdate" = "0"' >> /root/.cxoffice/cxoffice.conf
+mv /usr/share/libalpdev/cxoffice.conf /root/.cxoffice/
+echo -e '[CrossOver]' > /root/.cxoffice/cxoffice.conf
+echo -e '"ReportWineUsage" = "0"' >> /root/.cxoffice/cxoffice.conf
+echo -e "" >> /root/.cxoffice/cxoffice.conf
+echo -e '[OfficeSetup]' >> /root/.cxoffice/cxoffice.conf
+echo -e '"AutoUpdate" = "0"' >> /root/.cxoffice/cxoffice.conf
+##
+ln -sf /opt/cxoffice/bin/wine /usr/bin/wine
+ln -sf /opt/cxoffice/bin/crossover /usr/bin/crossover
+chmod +x /usr/bin/wine
+chmod +x /usr/bin/crossover
+ln -sf /root/.cxoffice/Aramo/drive_c/ /mnt/Aramo
+ln -sf /root/.cxoffice/Aramo /root/.cxoffice/default
+ln -sf /dev/ttyS0 /root/.cxoffice/Aramo/dosdevices/com1
+ln -sf /dev/ttyS1 /root/.cxoffice/Aramo/dosdevices/com2
+ln -sf /dev/ttyS2 /root/.cxoffice/Aramo/dosdevices/com3
+ln -sf /dev/ttyS3 /root/.cxoffice/Aramo/dosdevices/com4
+ln -sf /dev/ttyS4 /root/.cxoffice/Aramo/dosdevices/com5
+ln -sf /dev/ttyS5 /root/.cxoffice/Aramo/dosdevices/com6
+ln -sf /dev/ttyS6 /root/.cxoffice/Aramo/dosdevices/com7
+ln -sf /dev/usbPinPad /root/.cxoffice/Aramo/dosdevices/com8
+ln -sf /dev/usbBal /root/.cxoffice/Aramo/dosdevices/com9
+ln -sf /dev/usbEcf /root/.cxoffice/Aramo/dosdevices/com10/
+ln -sf /dev/sr0 /root/.cxoffice/Aramo/dosdevices/d::
+ln -sf ../drive_c/ /root/.cxoffice/Aramo/dosdevices/c:
+ln -sf /root/ /root/.cxoffice/Aramo/dosdevices/y:
+ln -sf / /root/.cxoffice/Aramo/dosdevices/z:
+#
+mv -f /usr/share/libalpdev/arial.ttf /usr/local/share/fonts/arial.ttf
+#
+mv -f /usr/share/libalpdev/license.sig /opt/cxoffice/etc/license.sig
+mv -f /usr/share/libalpdev/license.txt /opt/cxoffice/etc/license.txt
+#
+chmod 755 /root/ -Rf
+#
+echo -e '#!/bin/bash' > /mnt/Aramo/windows/system32/shutdown.exe
+echo -e 'shutdown -h now' >> /mnt/Aramo/windows/system32/shutdown.exe
+chmod +x /mnt/Aramo/windows/system32/shutdown.exe
+#
+echo -e '#!/bin/bash' > /mnt/Aramo/windows/imprimir
+echo -e 'PORTA=usbEcf' >> /mnt/Aramo/windows/imprimir
+echo -e 'cat /root/.cxoffice/Aramo/drive_c/MASTERBOX/ESCPOS > /dev/$PORTA' >> /mnt/Aramo/windows/imprimir
+chmod +x /mnt/Aramo/windows/imprimir
+#
+grub-mkconfig -o /boot/grub/grub.cfg
+#
+sed -i 's\^GRUB_TIMEOUT=.*\GRUB_TIMEOUT=0\' /etc/default/grub
+sed -i 's\^GRUB_CMDLINE_LINUX_DEFAULT=*.*\GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.autosuspend=-1 acpi=force"\' /etc/default/grub
+#sed -i 's\^GRUB_CMDLINE_LINUX=.*\GRUB_CMDLINE_LINUX="video=vesa net.ifnames=0 biosdevname=0"\' /etc/default/grub
+echo -e "#" >> /etc/default/grub
+#echo -e "GRUB_GFXPAYLOAD_LINUX=800x600" >> /etc/default/grub
+echo -e "GRUB_GFXPAYLOAD_LINUX=keep" >> /etc/default/grub
+echo -e "GRUB_GFXMODE=800x600" >> /etc/default/grub
+echo -e "#" >> /etc/default/grub
+update-grub
+#
+echo "PDV - Masterbox" > /etc/issue
+sed -i 's\^#DefaultTimeoutStartSec.*\DefaultTimeoutStartSec=10s\' /etc/systemd/system.conf
+sed -i 's\^#DefaultTimeoutStopSec=10s.*\DefaultTimeoutStopSec=5s\' /etc/systemd/system.conf
+sed -i 's\^TimeoutStartSec.*\TimeoutStartSec=10s\' /etc/systemd/system/network-online.target.wants/networking.service
+systemctl daemon-reload
+#
+usbedit padrao
+systemctl daemon-reload
+#
+mv -f /usr/share/libalpdev/persona_circle /usr/share/plymouth/themes/
+chmod 755 /usr/share/plymouth/themes/persona_circle/ -Rf
+chown root:root /usr/share/plymouth/themes/persona_circle/ -Rf
+mv -f /usr/share/libalpdev/persona_bar /usr/share/plymouth/themes/
+chmod 755 /usr/share/plymouth/themes/persona_bar/ -Rf
+chown root:root /usr/share/plymouth/themes/persona_bar/ -Rf
+touch /etc/setm3
+##
+rm /usr/share/plymouth/themes/tribar -Rf
+rm /usr/share/plymouth/themes/fade-in -Rf
+rm /usr/share/plymouth/themes/glow -Rf
+rm /usr/share/plymouth/themes/script -Rf
+rm /usr/share/plymouth/themes/solar -Rf
+rm /usr/share/plymouth/themes/spinfinity -Rf
+rm /usr/share/plymouth/themes/spinner -Rf
+#
+##
+#
+export DEBIAN_FRONTEND=dialog
+rm -rf /usr/bin/defaults
+##
+ifconfig -a |grep 'flags' |egrep -v 'lo' |awk '{print $1}' |cut -d ":" -f1
+placas=$(ifconfig -a |grep 'flags' |egrep -v 'lo' |awk '{print $1}' |cut -d ":" -f1)
+ip=10
+i=0
+for placa in $placas; do
+	echo -e "auto eth$i" > /etc/network/interfaces.d/eth$i
+	echo -e "allow-hotplug eth$i" >> /etc/network/interfaces.d/eth$i
+	echo -e "iface eth$i inet static" >> /etc/network/interfaces.d/eth$i
+	echo -e "address 10.10.10.$ip" >> /etc/network/interfaces.d/eth$i
+	echo -e "netmask 255.0.0.0" >> /etc/network/interfaces.d/eth$i
+	echo -e "network 10.10.10.0" >> /etc/network/interfaces.d/eth$i
+	echo -e "broadcast 10.10.10.255" >> /etc/network/interfaces.d/eth$i
+	let ip++
+	let i++
+done
+#
+# INSTALACAO MARIADB
+sed -i 's\bind-address.*\#bind-address.*\' $mdbcnf
+sed -i 's\skip-external-locking.*\#skip-external-locking.*\' $mdbcnf
+echo "lower_case_table_names = 1" >> $mdbcnf
+echo "skip-grant-tables" >> $mdbcnf
+mysql -u$user -p$pass -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '152100';"
+mysql -u$user -p$pass -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
+mysql -u$user -p$pass -e "CREATE USER 'root'@'%' IDENTIFIED BY '152100';"
+mysql -u$user -p$pass -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+mysql -u$user -p$pass -e "FLUSH PRIVILEGES;"
+cat > /etc/rc.local << "EOF"
+#!/bin/bash
+while :; do
+	if [[ -e /run/mysqld/mysqld.pid ]]; then
+	break
+	fi
+done
+/usr/bin/mysqladmin -u root password '152100'
+mysql -uroot -p152100 -e"GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '152100' WITH GRANT OPTION;" -f
+mysql -uroot -p123456 -e"FLUSH PRIVILEGES;" -f
+sleep 1
+service mysql restart
+#rm -rf /etc/rc.local
+confser setser
+EOF
+chmod +x /etc/rc.local
+backuppdv criamdb
+#
+plymouth-set-default-theme persona_bar --rebuild-initrd
+##
+echo aramoPdv > /etc/hostname
+echo aramoPdv > /proc/sys/kernel/hostname 
+###
+echo -e "######\n#" > /etc/apt/sources.list
+mv -f /usr/share/libalpdev/cxreboot /opt/cxoffice/bin/cxreboot
+sed -i 's\"Wallpaper"=*.*\"Wallpaper"="c://wallpaper.bmp"\' /root/.cxoffice/Aramo/user.reg
+###
+####################
+export DEBIAN_FRONTEND=dialog
+sed -i 's\defaults on.*\#defaults on\' /etc/rc.local
+rm -rf /usr/bin/defaults
+}
+####################
+
+case $1 in
+	on)
+		run
+	;;
+esac
+exit 0
