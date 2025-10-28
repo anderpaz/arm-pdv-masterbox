@@ -9,6 +9,7 @@
 # Testar o vnc
 # Nâo precisa mais de firebird?
 # O Sistema usa m3 ou m5?
+# VIm colavel
 
 # Instalar o firebird
 # Rever o comando defaults

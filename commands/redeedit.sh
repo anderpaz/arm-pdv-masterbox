@@ -2,21 +2,28 @@
 
 placas=$(ifconfig -a |grep 'flags' |egrep -v 'lo' |awk '{print $1}' |cut -d ":" -f1)
 lista=$(echo $placas |sed 's/[ ]/;/')
-arq="/etc/network/interfaces.d/"
+arq="/etc/network/interfaces"
 resolv="/etc/resolv.conf"
 
-reiniciar()
-{
+reiniciar(){
 	placas=$(ifconfig -a |grep 'flags' |egrep -v 'lo' |awk '{print $1}' |cut -d ":" -f1)
 	for i in $placas ; do
-		ip addr flush $i
+		 ip addr flush $placas
 	done
 	systemctl restart networking
 }
 
-redereset()
-{
-	reiniciar | yad --undecorated --borders=15 --progress --pulsate --percentage=85 --width=300 --text="<b>\tReiniciando a rede</b>" --progress-text="Reiniciando ..." --auto-close --auto-kill --center --no-buttons --height=80 --image="network-wired-disconnected"
+redereset(){
+	reiniciar | yad --undecorated --borders=15 --progress --pulsate --percentage=85 --width=300 --text="<b>\tReiniciando a rede</b>" --progress-text="Reiniciando ... Aguarde =) ..." --auto-close --auto-kill --center --no-buttons --height=80 --image="network-wired-disconnected"
+}
+
+aguarde(){
+	aguardar | yad --undecorated --borders=15 --progress --pulsate --percentage=85 --width=300 --text="<b>\tReiniciando a rede</b>" --progress-text="Reiniciando ... Aguarde =) ..." --auto-close --auto-kill --center --no-buttons --height=80 --image="network-wired-disconnected"
+
+}
+
+aguardar(){
+	sleep 4
 }
 
 setnome()
@@ -37,6 +44,7 @@ setnome()
 	else
 		echo $resp > /etc/hostname
 		echo $resp > /proc/sys/kernel/hostname
+		sed -i '2s/.*/127.0.1.1\t'"$(hostname)"'/' /etc/hosts
 		xauth generate $DISPLAY
 		yad --center --undecorated --width=400 --height=30 --borders=15 --text="<big>Reinicie o PDV para aplicar as alterações.</big>" --button="Fechar!window-close:1"  --image="dialog-warning"
 		exit 0;
@@ -52,15 +60,14 @@ validRede()
 	fi
 }
 
-ipEdit()
-{
-	cat > /etc/network/interfaces << EOF
+ipEdit(){
+	cat > $arq << EOF
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
 
 
-source /etc/network/interfaces.d/*
+# source /etc/network/interfaces.d/*
 # The loopback network interface
 auto lo
 iface lo inet loopback
@@ -75,7 +82,7 @@ EOF
 	dns2=$(echo $resp | cut -d "|" -f 7)
 
 	if [[ $prop == "DHCP" ]]; then
-        cat > $arq$placa << EOF
+        cat > $arq << EOF
 auto $placa 
 iface $placa inet dhcp
 iface $placa inet6 auto
@@ -84,7 +91,17 @@ EOF
 		exit 0
 	elif [[ $prop == "Desativar" ]]; then
 		ip link set enp0s8 down
-		rm $arq$placa
+		cat > $arq << EOF
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+
+
+# source /etc/network/interfaces.d/*
+# The loopback network interface
+auto lo
+iface lo inet loopback
+EOF
 		redereset
 		exit 0
 	fi
@@ -105,15 +122,32 @@ EOF
 	if [[ ! -z $dns1 ]]; then validRede $dns1; fi
 	if [[ ! -z $dns2 ]]; then validRede $dns2; fi
 
-    cat > $arq$placa << EOF
+    cat > $arq << EOF
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+
+
+# source /etc/network/interfaces.d/*
+# The loopback network interface
+
+auto lo
+iface lo inet loopback
+
 auto $placa
 iface $placa inet static
+#Não é recomendado fazer alteracao por aqui.
+#caso faça, precisa reiniciar a maquina.
 	address $ip
 	netmask $mask
 	network $netwok
 	broadcast $broadcast
 	gateway $gateway
+dns-nameservers $dns1 $dns2
 EOF
+	ifconfig $placa $ip netmask $mask
+	route add default gw $gateway
 	[[ ! -z $dns1 ]] &&  { echo "nameserver ${dns1}" > ${resolv} ; }
 	[[ ! -z $dns2 ]] &&  { echo "nameserver ${dns2}" >> ${resolv} ; }
 }
@@ -121,20 +155,21 @@ EOF
 setIp()
 {
 	resp=$(yad --width=420 --height=400 --undecorated \
-                --text="\n<b><big>\t\t\t\tREDE</big></b>\n\n<b>Configuração de Rede</b>\n\n" --center --borders=15 \
+                --text="\n<b><big>\t\t\t\tREDE</big></b>\n\n<b>Configuração de Rede v2</b>\n\n" --center --borders=15 \
                 --image="network-wired-disconnected" --image-to-top \
                 --form --item-separator=";" \
-                --field="Escolha a placa: ":CBE $lista \
-                --field="Propiedades: ":CB "Manual;DHCP;Desativar"  \
-                --field="Endereço IP: " \
-                --field="Mascara: " \
-                --field="Gateway: " \
-                --field="Dns Primario: " \
+                --field="Escolha a placa*: ":CBE $lista \
+                --field="Propiedades*: ":CB "Manual;DHCP;Desativar"  \
+                --field="Endereço IP*: " \
+                --field="Mascara*: " \
+                --field="Gateway*: " \
+                --field="Dns Primario*: " \
                 --field="Dns Secundario: ")
 
 	if [ ! -z $resp ]; then
 		ipEdit
-		redereset
+		sed -i '2s/.*/127.0.1.1\t'"$(hostname)"'/' /etc/hosts
+		aguarde
 	fi
 
 }

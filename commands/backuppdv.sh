@@ -3,7 +3,7 @@
 arqshut="/root/.cxoffice/Aramo/drive_c/windows/system32/shutdown.exe"
 arqbkp="/root/.cxoffice/Aramo/drive_c/windows/backuppdv.conf"
 arqchave="$path/chave"
-path="/tmp/.backuppdv"
+path="/mnt/Aramo/MASTERBOX/BKP"
 banco="masterbox"
 masterbox="/mnt/Aramo/MASTERBOX/"
 regedit="/root/.cxoffice/Aramo/system.reg"
@@ -13,8 +13,172 @@ servicemdb="/etc/init.d/mysql"
 arqcriamdb="/tmp/criamdb"
 confmdb="/etc/mysql/mariadb.conf.d/50-server.cnf"
 pathbkp="/banco/backupAramo"
+data=`date +%d-%m-%Y`
+datahoraminuto=`date +%d-%m-%Y-%H.%M`
+nomepdv=$(cat /etc/hostname)
+caminhobkpnomepdv="/mnt/Aramo/BACKUP/$nomepdv"
+caminhobkp="/mnt/Aramo/BACKUP"
 
 #####################################################################################################
+VerificaCaminhoBkp() {
+    if [ ! -d "$caminhobkp" ]; then
+        mkdir -p $caminhobkp
+    fi
+    cd $caminhobkp
+    if [[ ! -d "$nomepdv" ]]; then
+        mkdir -p $nomepdv
+    fi
+    if [[ ! -d "old" ]]; then
+        mkdir -p old
+    fi
+	if [[ ! -d "SQL" ]]; then
+        mkdir -p SQL
+    fi
+    if [[ ! -d "SQL/old/" ]]; then
+        mkdir -p SQL/old/
+    fi
+}
+
+VerificaCaminhoBkpArqConfigs() {
+    if [ ! -d "$caminhobkpnomepdv/ArqConfigs/" ]; then
+        mkdir -p $caminhobkpnomepdv/ArqConfigs/
+    fi
+}
+
+FazBkpArqConfigs(){
+    IniciaFazBkpArqConfigs | yad --text-info --tail --title="BACKUP ARQCONFIGS" --width="430" --height="320" --button="gtk-close:1" --center --no-buttons --auto-close
+}
+
+FazBkpMasterboxManual(){
+    IniciaBakupManualBanco | yad --text-info --tail --title="BACKUP BANCO MASTERBOX" --width="430" --height="320" --button="gtk-close:1" --center --no-buttons --auto-close
+}
+
+FazBkpManutencaoPdv(){
+    IniciaBakupManualPdv | yad --text-info --tail --title="BACKUP DO PDV" --width="430" --height="350" --button="gtk-close:1" --center --no-buttons --auto-close
+}
+
+IniciaFazBkpArqConfigs(){
+    resetmaster kill
+    echo
+    echo " --> INICIANDO PROCESSO DE BACKUP. <--"
+    echo " --> NAO DESLIGUE O PDV. <--"
+    sleep 2
+    echo
+    echo "Criando pastas."
+    VerificaCaminhoBkp
+    echo "OK!"
+    echo
+    echo "Fazendo backup do banco de dados."
+    mastersql FazBkpmasterboxManual
+    VerificaCaminhoBkpArqConfigs
+    echo "OK!"
+    echo
+    cd $masterbox
+    echo "Copiando arquivos."
+    cp *.ini $caminhobkpnomepdv/ArqConfigs/
+    sleep 1
+    cp MasterBox.exe $caminhobkpnomepdv/ArqConfigs/
+    cp -r $regedit $caminhobkpnomepdv/ArqConfigs/
+    cd $caminhobkp
+    mv *.tar.gz old/
+    echo "Compactando arquivos... Aguarde!"
+    tar -czf BKP.ArqConfigs.$nomepdv.$data.tar.gz $nomepdv
+    rm -rf $nomepdv
+    mv BKP.ArqConfigs.$nomepdv.$data.tar.gz BKP.ArqConfigs.$nomepdv.$datahoraminuto.tar.gz
+    cp *.tar.gz /mnt/temp
+    echo
+    echo "OK!"
+    echo
+    echo " --> BACKUP ArqConfigs REALIZADO COM SUCESSO. <--"
+    echo " --> UMA COPIA DO BKP ENVIADO PARA /mnt/temp/  <--"
+    echo " --> USE O \\\ PARA COPIAR PARA UM LOCAL SEGURO  <--"
+    echo
+    echo "--> TECLA ESC PARA CONTINUAR. <--"
+    exit 0
+}
+
+IniciaBakupManualBanco(){
+    resetmaster kill
+    echo
+    echo " --> INICIANDO PROCESSO DE BACKUP. <--"
+    echo " --> NAO DESLIGUE O PDV. <--"
+    sleep 2
+    echo
+    echo "Criando pastas."
+    VerificaCaminhoBkp
+    echo "OK!"
+    echo
+    echo "Fazendo backup do banco de dados."
+    mastersql FazBkpmasterboxManual
+    sleep 1
+    echo "OK!"
+    echo
+    sleep 1
+    echo "Copiando arquivos."
+    cd $caminhobkp/
+    mv *.tar.gz old/
+    tar -czf BKP.BANCO.masterbox.$nomepdv.$data.tar.gz $nomepdv
+    mv BKP.BANCO.masterbox.$nomepdv.$data.tar.gz BKP.BANCO.masterbox.$nomepdv.$datahoraminuto.tar.gz
+    sleep 1
+    cp *.tar.gz /mnt/temp/
+    sleep 2
+    rm -rf $nomepdv
+    echo "OK!"
+    sleep 1
+    echo
+    echo " --> BACKUP BANCO MANUAL REALIZADO COM SUCESSO. <--"
+    echo " --> UMA COPIA DO BKP ENVIADO PARA /mnt/temp/  <--"
+    echo " --> USE O \\\ PARA COPIAR PARA UM LOCAL SEGURO  <--"
+    echo
+    echo "--> TECLA ESC PARA CONTINUAR. <--"
+    exit 0
+
+}
+
+IniciaBakupManualPdv(){    
+    resetmaster kill
+    echo
+    echo " --> INICIANDO PROCESSO DE BACKUP. <--"
+    echo " --> NAO DESLIGUE O PDV. <--"
+    sleep 2
+    echo
+    echo "Criando pastas."
+    VerificaCaminhoBkp
+    echo "OK!"
+    echo
+    echo "Fazendo backup do banco de dados."
+    mastersql FazBkpmasterboxManual
+    sleep 1
+    echo "OK!"
+    echo
+    cp -r $regedit $caminhobkpnomepdv
+    echo "Compactando arquivos MASTERBOX... Aguarde!"
+    cd /mnt/Aramo/
+    tar -czf BKP.MASTERBOX.$nomepdv.$data.tar.gz MASTERBOX/
+    mv BKP.MASTERBOX.$nomepdv.$data.tar.gz $caminhobkpnomepdv/MASTERBOX.$nomepdv.$datahoraminuto.tar.gz
+    echo "OK!"
+    echo
+    sleep 1
+    echo "Copiando arquivos."
+    cd $caminhobkp/
+    mv *.tar.gz old/
+    tar -czf BKP.MASTERBOX.$nomepdv.$data.tar.gz $nomepdv
+    mv BKP.MASTERBOX.$nomepdv.$data.tar.gz BKP.MASTERBOX.$nomepdv.$datahoraminuto.tar.gz
+    sleep 1
+    cp *.tar.gz /mnt/temp/
+    sleep 2
+    rm -rf $nomepdv
+    echo "OK!"
+    sleep 1
+    echo
+    echo " --> BACKUP MASTERBOX MANUAL REALIZADO COM SUCESSO. <--"
+    echo " --> UMA COPIA DO BKP ENVIADO PARA /mnt/temp/  <--"
+    echo " --> USE O \\\ PARA COPIAR PARA UM LOCAL SEGURO  <--"
+    echo
+    echo "--> TECLA ESC PARA CONTINUAR. <--"
+    exit 0
+    
+}
 
 mnbackuppdv() {
 
@@ -331,5 +495,17 @@ editarbkp)
     ;;
 criamdb)
     criamdb
+    ;;
+FazBkpManutencaoPdv)
+    FazBkpManutencaoPdv
+    ;;
+FazBkpMasterboxManual)
+    FazBkpMasterboxManual
+    ;;
+FazBkpArqConfigs)
+    FazBkpArqConfigs
+    ;;
+VerificaCaminhoBkp)
+    VerificaCaminhoBkp
     ;;
 esac

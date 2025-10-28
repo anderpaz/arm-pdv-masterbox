@@ -12,9 +12,7 @@ if [ ! -z $1 ]; then
 fi
 mnreset
 numlockx on
-chmod 755 /mnt/Aramo/MASTERBOX/MASTERBOXNOVO.FDB -Rf && chown firebird:firebird /mnt/Aramo/MASTERBOX/MASTERBOXNOVO.FDB
 cd /root/.cxoffice/Aramo/drive_c/MASTERBOX/
-nice -20 /opt/cxoffice/bin/wine explorer /desktop=800x600 "/root/.cxoffice/Aramo/drive_c/MASTERBOX/MasterBox.exe" &
+nice -20 /opt/cxoffice/bin/wine explorer /desktop=M5 "/root/.cxoffice/Aramo/drive_c/MASTERBOX/MasterBox.exe" &
 confset setser
-#
 exit 0

@@ -1,6 +1,6 @@
 /usr/bin/xset -dpms s off
 xset s off s noblank dpms 0 0 0
-xrandr -s 800x600
+xrandr -s 1024x768
 numlockx
-hsetroot -fill /root/.config/img/background.png
+hsetroot -fill /root/.config/img/background.pn1024x768g
 resetmaster &

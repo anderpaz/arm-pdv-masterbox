@@ -96,6 +96,15 @@ validId(){
 	fi
 }
 
+validIdLoja(){
+
+	if [[ ! $idloja = ?(+|-)+([0-9]) ]] || [ "$(echo $idloja | wc -c)" -ge 5 ] ; then 
+		yad --title="ERRO" --text="\n\t<big>IDLOJA do pdv informado é invalido.\n\nValor informado:<b> $(echo $idloja)</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
+		finalizar
+		exit 1
+	fi
+}
+
 ipCaixa(){
 
 	FORM=$(yad --form --center --button="gtk-cancel:1"  --button="Salvar"!gtk-ok --width=500 --title="MENU DE COPIA" --text="\n\t<b>IP do caixa para copia:</b>\t<b>$nome</b>\n\n" --field="" --image="system")
@@ -114,6 +123,13 @@ idLocal(){
 
 }
 
+idLojaLocal(){
+
+	IDLOJA=$(yad --form --center --button="gtk-cancel:1"  --button="Salvar:0"!gtk-ok --width=500 --title="MENU DE COPIA" --text="\n\t<b>IDLOJA da LOJA que esta sendo instalado.</b>\t<b>$nome</b>\n\n" --field="QUAL É O ID DA LOJA?:":N --image="system")
+	idloja=$(echo "$IDLOJA" | cut -d "|" -f 1)
+	validIdLoja $idloja
+}
+
 copyget(){
 	sshpass -p "152100" rsync -rv -e "$chave" root@$ip:/root/.cxoffice/Aramo/system.reg $path/system.reg >> $log 2>&1
 	if [ ! $? -eq 0 ]; then
@@ -123,7 +139,7 @@ copyget(){
 	fi
 	cd $arq
 	mv tema oldtema
-	sshpass -p "152100" rsync --exclude={BKPX*,NFCe*,LOG*,STAT*,Bkp*,MASTERBOXNOVO*,*.log*,*.LOG,*.old*,*.Old,*.OLD,*.oo,*.OO,*.dd,*.DD,CARGA*,IMAGENS*} -rv -e "$chave" root@$ip:/mnt/Aramo/MASTERBOX/* $arq >> $log 2>&1
+	sshpass -p "152100" rsync --exclude={BKPX*,NFCe*,LOG*,STAT*,Bkp*,MASTERBOXNOVO*,*.log*,*.LOG,*.old*,*.Old,*.OLD,*.oo,*.OO,*.dd,*.DD,CARGA*} -rv -e "$chave" root@$ip:/mnt/Aramo/MASTERBOX/* $arq >> $log 2>&1
 	if [ ! $? -eq 0 ]; then
 	        yad --title="ERRO" --text="\n\n\t<b><big>Erro ao realizar download\n\tdo caixa de destino</big></b>" --button="gtk-close:1" --center --width=400 --height=50 --image="gtk-dialog-error"
 		finalizar
@@ -141,7 +157,7 @@ copygetsreg(){
 
 	cd $arq
 	mv tema oldtema
-	sshpass -p "152100" rsync --exclude={BKPX*,NFCe*,LOG*,STAT*,Bkp*,MASTERBOXNOVO*,*.log*,*.LOG,*.old*,*.Old,*.OLD,*.oo,*.OO,*.dd,*.DD,CARGA*,IMAGENS*} -rv -e "$chave" root@$ip:/mnt/Aramo/MASTERBOX/* $arq >> $log 2>&1
+	sshpass -p "152100" rsync --exclude={BKPX*,NFCe*,LOG*,STAT*,Bkp*,MASTERBOXNOVO*,*.log*,*.LOG,*.old*,*.Old,*.OLD,*.oo,*.OO,*.dd,*.DD,CARGA*} -rv -e "$chave" root@$ip:/mnt/Aramo/MASTERBOX/* $arq >> $log 2>&1
 	if [ ! $? -eq 0 ]; then
 	        yad --title="ERRO" --text="\n\n\t<b><big>Erro ao realizar download\n\tdo caixa de destino</big></b>" --button="gtk-close:1" --center --width=400 --height=50 --image="gtk-dialog-error"
 		finalizar
@@ -156,7 +172,8 @@ copygetsreg(){
 
 }
 
-sqlget() {
+configget() {
+
 	mysqldump -h$ip -u$user -p$pass $banco config > $update 
 	if [ ! $? -eq 0 ]; then	
 		yad --title="ERRO" --text="\n\t<big><b>Erro ao atualizar tabela CONFIG</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
@@ -179,6 +196,52 @@ sqlget() {
 	done	
 	sed -i '$s/,/;/' $update | tail -1
 	echo "commit;" >> $update
+
+}
+
+configset(){
+	mysql -uroot -p152100 $banco < $update >> $log 2>&1
+	if [ ! $? -eq 0 ]; then	
+		yad --title="ERRO" --text="\n\t<big><b>Erro ao atualizar tabela CONFIG</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
+		finalizar
+		exit 1
+	fi
+}
+
+confignovaget() {
+
+	mysqldump -h$ip -u$user -p$pass $banco confignova > $update 
+	if [ ! $? -eq 0 ]; then	
+		yad --title="ERRO" --text="\n\t<big><b>Erro ao atualizar tabela CONFIGNOVA</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
+		finalizar
+		exit 1
+	fi
+	numcoluna=$(cat $sqlget | awk '{print NF}' | sed -n '2p')
+
+	cont="1"
+	while [ $cont -le $numcoluna ]; do
+		coluna=$(cat $sqlget | awk '{print $'$cont'}' | sed -n '2p')
+		valor=$(cat $sqlget | awk '{print $'$cont'}' | sed -n '4p')
+		if [ $valor = "<null>" ]; then
+			valor="null"
+		else
+			valor="'$valor'"
+		fi
+		echo "$coluna = $valor," >> $update
+		let cont=$cont+1
+	done	
+	sed -i '$s/,/;/' $update | tail -1
+	echo "commit;" >> $update
+
+}
+
+confignovaset(){
+	mysql -uroot -p152100 $banco < $update >> $log 2>&1
+	if [ ! $? -eq 0 ]; then	
+		yad --title="ERRO" --text="\n\t<big><b>Erro ao atualizar tabela CONFIGNOVA</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
+		finalizar
+		exit 1
+	fi
 }
 
 setid() {
@@ -211,13 +274,21 @@ setid() {
 
 }
 
-sqlset(){
-	mysql -uroot -p152100 $banco < $update >> $log 2>&1
-	if [ ! $? -eq 0 ]; then	
-		yad --title="ERRO" --text="\n\t<big><b>Erro ao atualizar tabela CONFIG</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
-		finalizar
-		exit 1
+setidloja(){
+
+	terminal=$(cat $regedit |grep "TERMINAL" | cut -d '=' -f 2 | cut -c -6)
+	hexa=$(printf "%x" $idloja)
+
+	if [ $(echo $hexa | wc -c) -eq "2" ]; then
+		codigoloja="0000000"$hexa
+	elif [ $(echo $hexa | wc -c) -eq "3" ]; then
+	        codigoloja="000000"$hexa
+	elif [ $(echo $hexa | wc -c) -eq "4" ]; then
+                codigoloja="000000"$hexa
+	elif [ $(echo $hexa | wc -c) -lt "5"  ];then
+		yad --title="ERRO" --text="\n\t<big>IDLOJA do pdv informado maior que 999.\n\nValor informado:<b> $(echo $idloja)</b></big>" --button="gtk-close:1" --center --width=400 --height=100 --image="gtk-dialog-error"
 	fi
+	sed -i 's/"CODIGOLOJA"=dword:*.*/"CODIGOLOJA"=dword:'"$codigoloja"'/g' $regedit
 }
 
 copyset(){
@@ -240,6 +311,8 @@ copyset(){
 		finalizar
 		exit 1
 	fi
+
+	echo -e "COPIADO=1" >> $log 2>&1
 }
 
 copysetsreg(){
@@ -257,14 +330,23 @@ copysetsreg(){
 		exit 1
 	fi
 
+	echo -e "COPIADO=1" >> $log 2>&1
+
+}
+
+IniciaCopiaTema(){
+	echo "COPIANDO TEMA"
+	echo "AGUARDE..."
+	sshpass -p "152100" rsync -av scp $ip:/mnt/Aramo/MASTERBOX/tema/* /mnt/Aramo/MASTERBOX/tema >> $log 2>&1
+
 }
 
 comregrun(){
 
 	echo;echo "Copiando arquivos de $ip."
 	echo;echo "Atualizando tabela CONFIG."
-	sqlget
-	sqlset
+	configget
+	configset
 	echo "OK!"
 	echo;echo "Copiando arquivos."
 	copyget
@@ -272,9 +354,13 @@ comregrun(){
 	echo;echo "Atualizando arquivos."
 	copyset
 	echo "OK!"
-	echo;echo "Setando configuracoes do PDV: $id."
+	echo;echo "Setando CODIGOPDV do PDV: $id."
 	setid
 	setid
+	echo "OK!"
+	echo;echo "Setando CODIGOLOJA do PDV: $idloja."
+	setidloja
+	setidloja
 	echo "OK!"
 	/opt/cxoffice/bin/cxreboot > /dev/null 2>&1
 	echo;echo " --> COPIA REALISADA COM SUCESSO. <--"
@@ -286,8 +372,8 @@ semregrun(){
 
 	echo;echo "Copiando arquivos de $ip."
 	echo;echo "Atualizando tabela CONFIG."
-	sqlget
-	sqlset
+	configget
+	configset	
 	echo "OK!"
 	echo;echo "Copiando arquivos."
 	copygetsreg
@@ -301,15 +387,43 @@ semregrun(){
 	
 }
 
-bancorun(){
+configrun(){
 
 	echo;echo "Copiando arquivos de $ip."
 	echo;echo "Atualizando tabela CONFIG."
-	sqlget
-	sqlset
+	configget
+	configset		
 	echo "OK!"
 	echo;echo " --> COPIA REALIZADA COM SUCESSO. <--"
 	echo;echo " --> ESC PARA CONTINUAR. <--"
+
+}
+
+confignovarun(){
+
+	echo;echo "Copiando arquivos de $ip."
+	echo;echo "Atualizando tabela CONFIGNOVA."	
+	confignovaget
+	confignovaset	
+	echo "OK!"
+	echo;echo " --> COPIA REALIZADA COM SUCESSO. <--"
+	echo;echo " --> ESC PARA CONTINUAR. <--"
+}
+
+todasconfigrun() {
+
+	echo;echo "Copiando arquivos de $ip."
+	echo;echo "Atualizando tabela CONFIG."
+	configget
+	configset
+	echo "OK!"
+	echo;echo "Atualizando tabela CONFIGNOVA."
+	confignovaget
+	confignovaset	
+	echo "OK!"
+	echo;echo " --> COPIA REALIZADA COM SUCESSO. <--"
+	echo;echo " --> ESC PARA CONTINUAR. <--"
+
 }
 
 conectar() {
@@ -336,7 +450,8 @@ menugeral() {
 				--column='OPCAO6':NUM --column='texto':TEXT \
 				--window-icon="" --no-headers --print-column=1 --separator='' --hide-column=1 \
 				601 '<big>Sem regedit</big>' \
-				602 '<big>Com regedit</big>'
+				602 '<big>Com regedit</big>'\
+				603 '<big>Tema</big>'
 		)
 		[ $? -ne 0 ] && break
 		case "$OPCAO6" in
@@ -346,9 +461,22 @@ menugeral() {
 		602)
 			comreg
 			;;
+		603)
+			CopiaTema
+			;;
 		esac
 	done
 
+}
+
+CopiaTema(){
+
+	iniciar
+	ipCaixa
+	validRede
+	conectar
+	versao
+	IniciaCopiaTema | yad --text-info --tail --title="COPIANDO CONFIG E ARQUIVOS" --width="400" --height="350" --button="gtk-close:1" --center --no-buttons --auto-close
 }
 
 comreg(){
@@ -360,6 +488,8 @@ comreg(){
 	versao
 	idLocal
 	validId
+	idLojaLocal
+	validIdLoja
 	comregrun | yad --text-info --tail --title="COPIANDO CONFIG E ARQUIVOS" --width="400" --height="350" --button="gtk-close:1" --center --no-buttons --auto-close
 
 }
@@ -382,7 +512,29 @@ banco() {
 	validRede
 	conectar
 	versao
-	bancorun | yad --text-info --tail --title="COPIANDO CONFIG" --width="400" --height="300" --button="gtk-close:1" --center --no-buttons --auto-close
+	configrun | yad --text-info --tail --title="COPIANDO CONFIG" --width="400" --height="300" --button="gtk-close:1" --center --no-buttons --auto-close
+
+}
+
+confignova() {
+
+	iniciar
+	ipCaixa
+	validRede
+	conectar
+	versao
+	confignovarun | yad --text-info --tail --title="COPIANDO CONFIGNOVA" --width="400" --height="300" --button="gtk-close:1" --center --no-buttons --auto-close
+
+}
+
+todasconfig() {
+
+	iniciar
+	ipCaixa
+	validRede
+	conectar
+	versao
+	todasconfigrun | yad --text-info --tail --title="COPIANDO TABELAS DE CONFIGURACAO" --width="400" --height="300" --button="gtk-close:1" --center --no-buttons --auto-close
 
 }
 
@@ -393,6 +545,12 @@ case $1 in
 	;;
 	menugeral)
 		menugeral
+	;;
+	confignova)
+		confignova
+	;;
+	todasconfig)
+		todasconfig
 	;;
 esac
 finalizar

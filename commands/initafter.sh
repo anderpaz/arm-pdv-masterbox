@@ -69,6 +69,7 @@ ln -sf /dev/ttyS6 /root/.cxoffice/Aramo/dosdevices/com7
 ln -sf /dev/usbPinPad /root/.cxoffice/Aramo/dosdevices/com8
 ln -sf /dev/usbBal /root/.cxoffice/Aramo/dosdevices/com9
 ln -sf /dev/usbEcf /root/.cxoffice/Aramo/dosdevices/com10/
+ln -sf /dev/usbControlId /root/.cxoffice/Aramo/dosdevices/com11
 ln -sf /dev/sr0 /root/.cxoffice/Aramo/dosdevices/d::
 ln -sf ../drive_c/ /root/.cxoffice/Aramo/dosdevices/c:
 ln -sf /root/ /root/.cxoffice/Aramo/dosdevices/y:
@@ -76,6 +77,7 @@ ln -sf / /root/.cxoffice/Aramo/dosdevices/z:
 
 # Configurar o Masterbox
 usbedit padrao
+systemctl daemon-reload
 backuppdv criamdb
 
 # Remover
