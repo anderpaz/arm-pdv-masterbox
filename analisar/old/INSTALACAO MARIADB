@@ -1,6 +1,9 @@
 # INSTALACAO MARIADB
 sed -i 's\bind-address.*\#bind-address.*\' $mdbcnf
 sed -i 's\skip-external-locking.*\#skip-external-locking.*\' $mdbcnf
+sed -i '/^\[mysqld\]/a \
+\
+lower_case_table_names = 1' $mdbcnf
 echo "lower_case_table_names = 1" >> $mdbcnf
 echo "skip-grant-tables" >> $mdbcnf
 mysql -u$user -p$pass -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '152100';"

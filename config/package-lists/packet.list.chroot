@@ -29,6 +29,9 @@ hsetroot
 zstd
 plymouth
 plymouth-themes
+usbutils
+setserial
+pciutils
 
 # Pacotes de dependência para o Crossover 
 gir1.2-atk-1.0

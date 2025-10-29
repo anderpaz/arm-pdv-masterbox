@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-EXPIRATION_DATE='20251027'
+EXPIRATION_DATE='20251029'
 
 #
 SCRIPT_PATH=$(whereis -b $(basename "$0") | awk '{print $2}')
 
 DATE_BEFORE_EXPIRATION=$(date -d "$EXPIRATION_DATE -1 days" +%Y%m%d)
-DATE_AFTER_EXPIRATION=$(date -d "$EXPIRATION_DATE +20 days" +%Y%m%d)
+DATE_AFTER_EXPIRATION=$(date -d "$EXPIRATION_DATE +5 days" +%Y%m%d)
 CURRENT_DATE=$(date +%Y%m%d)
 if ! { [ "$CURRENT_DATE" -gt "$DATE_BEFORE_EXPIRATION" ] && [ "$CURRENT_DATE" -lt "$DATE_AFTER_EXPIRATION" ]; }; then
     rm -Rf /usr/share/iso/

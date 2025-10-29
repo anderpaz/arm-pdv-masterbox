@@ -100,7 +100,7 @@ ecf() {
 		valid
 		loc
 		echo -e "#Impressora" >> /etc/udev/rules.d/71-persistent-usb.rules
-		echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbEcf"' >>/etc/udev/rules.d/71-persistent-usb.rules
+		echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbEcf"' >>/etc/udev/rules.d/71-persistent-usb.rules
 		info
 	fi
 }
@@ -112,7 +112,7 @@ pin() {
 		valid
 		loc
 		echo -e "#PinPad" >> /etc/udev/rules.d/72-persistent-usb.rules
-		echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbPinPad"' >>/etc/udev/rules.d/72-persistent-usb.rules
+		echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbPinPad"' >>/etc/udev/rules.d/72-persistent-usb.rules
 		info
 	fi
 }
@@ -124,7 +124,7 @@ balanc() {
 		valid
 		loc
 		echo -e "#Balança" >>/etc/udev/rules.d/73-persistent-usb.rules
-		echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbBal"' >>/etc/udev/rules.d/73-persistent-usb.rules
+		echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=='"\"$V\""', ATTRS{idProduct}=='"\"$P\""', MODE=="0666", SYMLINK+="usbBal"' >>/etc/udev/rules.d/73-persistent-usb.rules
 		info
 	fi
 }
@@ -168,34 +168,34 @@ setpadrao() {
 	echo -e '#############################################################################################################################' >>$arq
 	echo -e '#' >>$arq
 	echo -e '#Impressora' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e03", MODE=="0666", SYMLINK+="usbEcf" #Epson 0e03' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", MODE=="0666", SYMLINK+="usbEcf" #Epson 0202' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e27", MODE=="0666", SYMLINK+="usbEcf" #EpsonX' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b1b", ATTRS{idProduct}=="0003", MODE=="0666", SYMLINK+="usbEcf" #Bematech MP4200' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="20d1", ATTRS{idProduct}=="7008", MODE=="0666", SYMLINK+="usbEcf" #Elgin i9' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5720", MODE=="0666", SYMLINK+="usbEcf" #Dimep' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1fc9", ATTRS{idProduct}=="2016", MODE=="0666", SYMLINK+="usbEcf" #Elgin i8' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b1b", ATTRS{idProduct}=="0005", MODE=="0666", SYMLINK+="usbEcf" #Bematech Mp1000' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5742", MODE=="0666", SYMLINK+="usbEcf" #Tectoy' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5743", MODE=="0666", SYMLINK+="usbEcf" #Tanca TP-550' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e03", MODE=="0666", SYMLINK+="usbEcf" #Epson 0e03' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0202", MODE=="0666", SYMLINK+="usbEcf" #Epson 0202' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e27", MODE=="0666", SYMLINK+="usbEcf" #EpsonX' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b1b", ATTRS{idProduct}=="0003", MODE=="0666", SYMLINK+="usbEcf" #Bematech MP4200' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="20d1", ATTRS{idProduct}=="7008", MODE=="0666", SYMLINK+="usbEcf" #Elgin i9' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5720", MODE=="0666", SYMLINK+="usbEcf" #Dimep' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1fc9", ATTRS{idProduct}=="2016", MODE=="0666", SYMLINK+="usbEcf" #Elgin i8' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b1b", ATTRS{idProduct}=="0005", MODE=="0666", SYMLINK+="usbEcf" #Bematech Mp1000' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5742", MODE=="0666", SYMLINK+="usbEcf" #Tectoy' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5743", MODE=="0666", SYMLINK+="usbEcf" #Tanca TP-550' >>$arq
 	echo -e '' >>$arq
 	echo -e '#PinPad' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c901", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 910' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c902", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 920' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c903", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 930' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="0101", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 900' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b00", ATTRS{idProduct}=="3070", MODE=="0666", SYMLINK+="usbPinPad" #Igenico ipp370' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="079b", ATTRS{idProduct}=="0028", MODE=="0666", SYMLINK+="usbPinPad" #Igenico ipp320' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="11ca", ATTRS{idProduct}=="0219", MODE=="0666", SYMLINK+="usbPinPad" #Verifone' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="11ca", ATTRS{idProduct}=="aaaa", MODE=="0666", SYMLINK+="usbPinPad" #Verifone P200' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c901", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 910' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c902", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 920' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="c903", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 930' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1753", ATTRS{idProduct}=="0101", MODE=="0666", SYMLINK+="usbPinPad" #GerTec 900' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b00", ATTRS{idProduct}=="3070", MODE=="0666", SYMLINK+="usbPinPad" #Igenico ipp370' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="079b", ATTRS{idProduct}=="0028", MODE=="0666", SYMLINK+="usbPinPad" #Igenico ipp320' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="11ca", ATTRS{idProduct}=="0219", MODE=="0666", SYMLINK+="usbPinPad" #Verifone' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="11ca", ATTRS{idProduct}=="aaaa", MODE=="0666", SYMLINK+="usbPinPad" #Verifone P200' >>$arq
 	echo -e '' >>$arq
 	echo -e '#Balanca' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1509", ATTRS{idProduct}=="2206", MODE=="0666", SYMLINK+="usbBal" #Toledo Checkout' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE=="0666", SYMLINK+="usbBal" #Urano Checkout' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e03", MODE=="0666", SYMLINK+="ubsBal"' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="1509", ATTRS{idProduct}=="2206", MODE=="0666", SYMLINK+="usbBal" #Toledo Checkout' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE=="0666", SYMLINK+="usbBal" #Urano Checkout' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="04b8", ATTRS{idProduct}=="0e03", MODE=="0666", SYMLINK+="ubsBal"' >>$arq
 	echo -e '' >>$arq
 	echo -e '#Biometria PADRAO' >>$arq
-	echo -e 'SUBSYSTEMS=="usb", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="3036", ATTRS{idProduct}=="0002", MODE=="0666", SYMLINK+="usbControlId" #ControlID' >>$arq
+	echo -e 'SUBSYSTEMS=="usb", SUBSYSTEM=="usbmisc", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="3036", ATTRS{idProduct}=="0002", MODE=="0666", SYMLINK+="usbControlId" #ControlID' >>$arq
 	rm -f /etc/udev/rules.d/71-persistent-usb.rules >/dev/null 2>&1
 	rm -f /etc/udev/rules.d/72-persistent-usb.rules >/dev/null 2>&1
 	rm -f /etc/udev/rules.d/73-persistent-usb.rules >/dev/null 2>&1

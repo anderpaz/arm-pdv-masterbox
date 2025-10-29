@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="3.0.5"
+VERSION="3.0.6"
 
 cat > /etc/version <<EOF
 Version: ${VERSION}

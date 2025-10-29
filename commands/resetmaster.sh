@@ -13,6 +13,6 @@ fi
 mnreset
 numlockx on
 cd /root/.cxoffice/Aramo/drive_c/MASTERBOX/
-nice -20 /opt/cxoffice/bin/wine explorer /desktop=M5 "/root/.cxoffice/Aramo/drive_c/MASTERBOX/MasterBox.exe" &
+nice -20 /opt/cxoffice/bin/wine explorer /desktop=M5,1024x768 "/root/.cxoffice/Aramo/drive_c/MASTERBOX/MasterBox.exe" &
 confset setser
 exit 0
